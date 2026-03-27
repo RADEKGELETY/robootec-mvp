@@ -82,6 +82,17 @@ class SignalEngine:
     def _generate_for_strategy(
         self, strategy: StrategyConfig, market_state: MarketState
     ) -> Optional[SignalCandidate]:
+        model = str(strategy.entry.get("model", "")).strip().lower()
+        if model == "opening_range_breakout":
+            return self._orb_momentum(strategy, market_state)
+        if model == "vwap_pullback":
+            return self._vwap_pullback(strategy, market_state)
+        if model == "macro_trend_pullback":
+            return self._macro_trend_pullback(strategy, market_state)
+        if model == "breakout_retest":
+            return self._daily_breakout_retest(strategy, market_state)
+        if model == "london_breakout":
+            return self._london_breakout(strategy, market_state)
         if strategy.id == "NAS_01_ORB_MOMENTUM":
             return self._orb_momentum(strategy, market_state)
         if strategy.id == "NAS_02_VWAP_PULLBACK":
