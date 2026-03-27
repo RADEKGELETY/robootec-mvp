@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="cs">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ROBOOTEC.AI | Slide 13</title>
+    <link rel="stylesheet" href="../styles.css" />
+  </head>
+  <body class="pitch">
+    <header>
+      <div class="brand">
+        <img class="brand-logo" src="../assets/robootec-logo.png" alt="ROBOOTEC.AI logo" />
+        <span class="brand-text">ROBOOTEC.AI Pitch</span>
+      </div>
+      <h1>Závěr</h1>
+    </header>
+
+    <main class="slide-wrapper">
+      <iframe class="slide-frame" title="Závěr" src="../assets/robootec-final-short.pdf#page=13&view=FitH&zoom=page&toolbar=0&navpanes=0&scrollbar=0"></iframe>
+      <div class="slide-text">
+        <p>Naším cílem je vytvořit inteligentní AI systém pro správu kapitálu, který bude schopný autonomně analyzovat trh a řídit investice.</p>
+        <p>Věříme, že kombinace umělé inteligence, dat a tradingu může zásadně změnit způsob, jakým se kapitál spravuje.</p>
+        <p>Hledáme investory, kteří chtějí být u vzniku této technologie od začátku.</p>
+        <p>Děkuji za pozornost.</p>
+      </div>
+      <div class="invest-cta">
+        <a class="action-button primary invest-button" href="#invest-form">Mám zájem o investici</a>
+      </div>
+      <form id="invest-form" class="invest-form">
+        <label>
+          Jméno a příjmení
+          <input name="name" type="text" autocomplete="name" required />
+        </label>
+        <label>
+          Email
+          <input name="email" type="email" autocomplete="email" required />
+        </label>
+        <label>
+          Telefon
+          <input name="phone" type="tel" autocomplete="tel" />
+        </label>
+        <label>
+          Výše investice (Kč)
+          <input name="amount" type="text" inputmode="numeric" placeholder="např. 1 000 000" />
+        </label>
+        <label>
+          Zpráva
+          <textarea name="message" placeholder="Krátce napište, co vás zajímá."></textarea>
+        </label>
+        <button class="action-button success" type="submit">Odeslat poptávku</button>
+        <p class="form-note">Po odeslání se otevře váš emailový klient s předvyplněnou zprávou.</p>
+      </form>
+      <div class="slide-actions">
+        <button class="action-button" data-speak data-speech="Naším cílem je vytvořit inteligentní AI systém pro správu kapitálu, který bude schopný autonomně analyzovat trh a řídit investice. Věříme, že kombinace umělé inteligence, dat a tradingu může zásadně změnit způsob, jakým se kapitál spravuje. Hledáme investory, kteří chtějí být u vzniku této technologie od začátku. Děkuji za pozornost.">Zapnout zvuk</button>
+        <a class="action-button secondary" href="slide-12.html">← Předchozí</a><a class="action-button secondary" href="../index.html">Zpět na úvod</a>
+      </div>
+      <div class="pitch-footer">Slide 13 / 13</div>
+    </main>
+
+    <script src="./slide.js"></script>
+    <script>
+      const investForm = document.querySelector("#invest-form");
+      if (investForm) {
+        investForm.addEventListener("submit", (event) => {
+          event.preventDefault();
+          const formData = new FormData(investForm);
+          const name = formData.get("name") || "";
+          const email = formData.get("email") || "";
+          const phone = formData.get("phone") || "";
+          const amount = formData.get("amount") || "";
+          const message = formData.get("message") || "";
+
+          const subject = "Zájem o investici – ROBOOTEC.AI";
+          const bodyLines = [
+            `Jméno: ${name}`,
+            `Email: ${email}`,
+            `Telefon: ${phone}`,
+            `Výše investice: ${amount}`,
+            "",
+            "Zpráva:",
+            message,
+          ];
+          const body = encodeURIComponent(bodyLines.join("\\n"));
+          window.location.href = `mailto:radek@robootec.ai?subject=${encodeURIComponent(subject)}&body=${body}`;
+        });
+      }
+    </script>
+  </body>
+</html>

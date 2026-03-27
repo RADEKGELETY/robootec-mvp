@@ -1,0 +1,175 @@
+version: 1
+system:
+  name: ROBOOTEC.AI MVP Trading System
+  currency: USD
+
+portfolio:
+  capital_allocation:
+    per_strategy: 100000
+  instruments:
+    - NASDAQ
+    - GOLD
+    - BITCOIN
+    - EURUSD
+
+global_risk:
+  max_daily_loss_per_strategy_pct: 2.0
+  max_weekly_drawdown_per_strategy_pct: 6.0
+  max_portfolio_daily_loss_pct: 3.5
+  max_consecutive_losses_before_cooldown: 3
+  loss_streak_size_reduction:
+    after_losses: 2
+    reduction_pct: 50
+  cooldown:
+    after_losses: 3
+    duration_minutes: 180
+
+trade_management:
+  break_even_at_r: 1.0
+  partial_exit:
+    at_r: 1.5
+    close_pct: 50
+  trailing_stop:
+    enabled_for_strategy_types:
+      - trend
+
+confidence_model:
+  name: RobootecConfidenceV1
+  output: confidence_score_0_1
+  thresholds:
+    min_to_trade: 0.55
+    min_for_full_size: 0.70
+  inputs:
+    - name: signal_quality
+      weight: 0.35
+    - name: trend_alignment
+      weight: 0.25
+    - name: volatility_regime
+      weight: 0.15
+    - name: liquidity_score
+      weight: 0.15
+    - name: event_risk
+      weight: -0.10
+  calibration:
+    method: rolling_30d_zscore
+    update_frequency: daily
+
+decision_engine:
+  rules:
+    - id: risk_gate
+      description: Block trades if any global risk limit breached
+      action: block
+      conditions:
+        - type: risk_limit_breached
+    - id: confidence_gate
+      description: Require minimum confidence to open a position
+      action: block
+      conditions:
+        - type: confidence_below
+          value: 0.55
+    - id: size_scaling
+      description: Scale position size by confidence bucket
+      action: scale_size
+      buckets:
+        - min_confidence: 0.55
+          max_confidence: 0.69
+          size_multiplier: 0.5
+        - min_confidence: 0.70
+          max_confidence: 0.84
+          size_multiplier: 0.8
+        - min_confidence: 0.85
+          max_confidence: 1.0
+          size_multiplier: 1.0
+    - id: session_filter
+      description: Trade only during defined strategy sessions
+      action: block
+      conditions:
+        - type: outside_session
+    - id: exposure_conflict
+      description: Avoid multiple strategies taking same direction on same instrument simultaneously
+      action: reduce_or_block
+      conditions:
+        - type: conflicting_exposure
+          max_same_direction_strategies: 1
+
+strategies:
+  - id: NAS_01_ORB_MOMENTUM
+    instrument: NASDAQ
+    type: momentum
+    timeframe: 5m
+    session:
+      timezone: America/New_York
+      hours: "09:30-16:00"
+    entry:
+      model: opening_range_breakout
+      range_minutes: 15
+      confirmation: volume_spike
+    exit:
+      model: r_multiple
+      target_r: 2.0
+    risk:
+      max_position_risk_pct: 0.5
+
+  - id: NAS_02_VWAP_PULLBACK
+    instrument: NASDAQ
+    type: mean_reversion
+    timeframe: 5m
+    session:
+      timezone: America/New_York
+      hours: "09:30-16:00"
+    entry:
+      model: vwap_pullback
+      confirmation: trend_filter
+    exit:
+      model: r_multiple
+      target_r: 1.8
+    risk:
+      max_position_risk_pct: 0.5
+
+  - id: XAU_02_MACRO_TREND_PULLBACK
+    instrument: GOLD
+    type: trend
+    timeframe: 1h
+    session:
+      timezone: UTC
+      hours: "00:00-23:59"
+    entry:
+      model: macro_trend_pullback
+      confirmation: higher_timeframe_alignment
+    exit:
+      model: r_multiple
+      target_r: 3.0
+    risk:
+      max_position_risk_pct: 0.6
+
+  - id: BTC_01_DAILY_BREAKOUT_RETEST
+    instrument: BITCOIN
+    type: trend
+    timeframe: 1d
+    session:
+      timezone: UTC
+      hours: "00:00-23:59"
+    entry:
+      model: breakout_retest
+      confirmation: volatility_expansion
+    exit:
+      model: r_multiple
+      target_r: 3.5
+    risk:
+      max_position_risk_pct: 0.7
+
+  - id: FX_01_LONDON_BREAKOUT
+    instrument: EURUSD
+    type: momentum
+    timeframe: 15m
+    session:
+      timezone: Europe/London
+      hours: "07:00-11:00"
+    entry:
+      model: london_breakout
+      confirmation: range_contraction
+    exit:
+      model: r_multiple
+      target_r: 2.0
+    risk:
+      max_position_risk_pct: 0.5

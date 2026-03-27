@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1200">
+  <defs>
+    <pattern id="hatch" width="12" height="12" patternUnits="userSpaceOnUse" patternTransform="rotate(20)">
+      <line x1="0" y1="0" x2="0" y2="12" stroke="#f2efe6" stroke-width="1" opacity="0.2" />
+    </pattern>
+  </defs>
+  <rect width="900" height="1200" fill="#050505" />
+  <rect width="900" height="1200" fill="url(#hatch)" opacity="0.35" />
+  <path d="M0 900 L140 740 L280 860 L420 680 L560 880 L700 720 L900 860" fill="none" stroke="#f2efe6" stroke-width="6" />
+  <path d="M120 980 C200 860 300 860 380 980" fill="none" stroke="#f2efe6" stroke-width="4" />
+  <path d="M380 980 C460 860 580 860 660 980" fill="none" stroke="#f2efe6" stroke-width="4" />
+  <circle cx="620" cy="560" r="120" fill="none" stroke="#f2efe6" stroke-width="5" />
+  <path d="M620 440 L620 700" stroke="#f2efe6" stroke-width="5" />
+  <path d="M560 620 L680 620" stroke="#f2efe6" stroke-width="5" />
+  <path d="M220 720 L260 640 L300 720" fill="none" stroke="#f2efe6" stroke-width="4" />
+  <path d="M280 760 L320 680 L360 760" fill="none" stroke="#f2efe6" stroke-width="4" />
+</svg>

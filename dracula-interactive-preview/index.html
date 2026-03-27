@@ -1,0 +1,453 @@
+<!doctype html>
+<html lang="cs">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Zrození Draculy — interaktivní komixová kniha (náhled)</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="intro-overlay" id="introOverlay" aria-hidden="false">
+      <div class="intro-card">
+        <p class="eyebrow">První náhled</p>
+        <h1>Zrození Draculy</h1>
+        <p class="lead">
+          Moderní interaktivní hororová komixová kniha. Čtení, komix, audio i soundtrack v jednom temném prostoru.
+        </p>
+        <button class="btn primary" id="enterBtn">Vstoupit do příběhu</button>
+        <p class="note">Zapne ambientní soundtrack a povolí hlasový výstup (prohlížeč vyžaduje kliknutí).</p>
+      </div>
+    </div>
+
+    <header class="site-header">
+      <div class="brand">
+        <span class="sigil">☩</span>
+        <div>
+          <p class="title">Zrození Draculy</p>
+          <p class="subtitle">Skutečný příběh nesmrtelné legendy — interaktivní náhled</p>
+        </div>
+      </div>
+      <div class="controls">
+        <button class="btn ghost" id="toggleSound">Soundtrack: Vypnuto</button>
+        <button class="btn ghost" id="toggleVoices">Hlasy: Vypnuto</button>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div class="hero-text">
+        <h2>Temnota, která čte i dýchá</h2>
+        <p>
+          Každá kapitola je samostatná stránka s linorytovou grafikou a vlastním zvukovým motivem. Text je
+          připraven pro vícero hlasů — vypravěč, postavy, šepoty.
+        </p>
+        <div class="hero-actions">
+          <a class="btn primary" href="#prolog">Začít prologem</a>
+          <button class="btn ghost" id="openTeaser">Přehrát teaser (video)</button>
+        </div>
+        <div class="feature-grid">
+          <div class="feature">
+            <p class="feature-title">Kniha + komix</p>
+            <p>Temné stránky, panelové rámy, vizuální rytmus.</p>
+          </div>
+          <div class="feature">
+            <p class="feature-title">Audiokniha</p>
+            <p>Každá postava vlastní hlas, střídání narátorů.</p>
+          </div>
+          <div class="feature">
+            <p class="feature-title">Soundtrack</p>
+            <p>Atmosférické drony a pulzující rytmus kapitol.</p>
+          </div>
+        </div>
+      </div>
+      <div class="hero-media" id="teaserPanel">
+        <div class="video-frame">
+          <div class="scanlines"></div>
+          <p class="video-title">Video teaser</p>
+          <p class="video-sub">Krátký vizuální sestřih (placeholder)</p>
+        </div>
+      </div>
+    </section>
+
+    <nav class="chapter-nav" aria-label="Kapitoly">
+      <a href="#prolog" class="nav-link">Prolog</a>
+      <a href="#kapitola-1" class="nav-link">Kapitola I</a>
+      <a href="#kapitola-2" class="nav-link">Kapitola II</a>
+      <a href="#kapitola-3" class="nav-link">Kapitola III</a>
+    </nav>
+
+    <main class="book">
+
+      <section class="chapter" id="prolog" data-soundtrack="karpaty">
+        <div class="chapter-page">
+          <div class="chapter-text">
+            <p class="chapter-tag">Stránka 1 / 4</p>
+            <h3>Prolog — Karpaty, noc roku 1462</h3>
+            <p class="chapter-note">Kompletní text kapitoly:</p>
+            <p class="chapter-line"><span data-voice="narrator">Vítr přicházel z hor.</span></p>
+            <p class="chapter-line"><span data-voice="narrator">Ne prudce, ne jako bouře, ale dlouhým táhlým dechem, který se plazil mezi stromy a nesl s sebou chlad z vysokých hřebenů. Lesy Karpat byly v té noci temné tak, jak mohou být temné jen staré lesy — hluboké, tiché a téměř bez konce.</span></p>
+            <p class="chapter-line"><span data-voice="narrator">Cesta, která vedla údolím řeky Argeș, byla úzká a rozbitá. Kůň po ní kráčel pomalu, jako by sám cítil, že noc není bezpečná.</span></p>
+            <p class="chapter-line"><span data-voice="narrator">Jezdec byl unavený.</span></p>
+            <p class="chapter-line"><span data-voice="narrator">Cestoval už mnoho dní z jihu, z krajiny, kde válka zanechala spálená pole a prázdné vesnice. Za ním zůstala země, kterou právě prošla armáda sultána. Před ním byly jen hory.</span></p>
+            <p class="chapter-line"><span data-voice="narrator">A někde mezi nimi hrad.</span></p>
+            <p class="chapter-line"><span data-voice="narrator">Vítr zesílil a koruny stromů se začaly pohybovat. Jehličí šumělo jako vzdálený šepot. Jezdec zvedl hlavu a zadíval se vzhůru do tmy.</span></p>
+            <p class="chapter-line"><span data-voice="narrator">Někde vysoko nad údolím, za černými siluetami stromů, měla stát pevnost.</span></p>
+            <p class="chapter-line"><span data-voice="narrator">Poenari.</span></p>
+            <p class="chapter-line"><span data-voice="narrator">Cesta začala stoupat.</span></p>
+            <p class="chapter-line"><span data-voice="narrator">Les kolem ní byl stále hustší. Kmeny stromů stály těsně vedle sebe, jejich větve se nad cestou proplétaly a vytvářely strop, skrz který pronikalo jen málo světla.</span></p>
+            <p class="chapter-line"><span data-voice="narrator">Měsíc byl zakrytý mraky a noc byla téměř úplná.</span></p>
+            <p class="chapter-line"><span data-voice="narrator">Jen občas se mezi stromy objevilo slabé světlo — malé ohně v odlehlých pasteveckých chýších nebo svíce za oknem některé z horských chalup.</span></p>
+            <p class="chapter-line"><span data-voice="narrator">Ale většinou byla tma.</span></p>
+            <p class="chapter-line"><span data-voice="narrator">Taková, která pohlcuje zvuky.</span></p>
+            <p class="chapter-line"><span data-voice="narrator">Jezdec si všiml, že les kolem něj náhle ztichl. Ptáci mlčeli. Dokonce i vítr na chvíli ustal.</span></p>
+            <p class="chapter-line"><span data-voice="narrator">Zůstal jen rytmus koňských kopyt.</span></p>
+            <p class="chapter-line"><span data-voice="narrator">V jedné z vesnic, kterou projel před soumrakem, ho starý muž zastavil.</span></p>
+            <p class="chapter-line"><span data-voice="narrator">Byl shrbený, s hlubokými vráskami ve tváři a očima, které se dívaly spíš do minulosti než na cestu před sebou.</span></p>
+            <p class="chapter-line"><span data-voice="dialogue">„Kam jedeš?“ zeptal se.</span></p>
+            <p class="chapter-line"><span data-voice="dialogue">„Na hrad.“ Starý muž dlouho mlčel. Pak jen pomalu zavrtěl hlavou.</span></p>
+            <p class="chapter-line"><span data-voice="dialogue">„Do hor se po setmění nejezdí.“ Jezdec se pousmál. Taková varování slyšel už mnohokrát.</span></p>
+            <p class="chapter-line"><span data-voice="dialogue">„Nebojím se vlků.“ Stařec však zavrtěl hlavou znovu.</span></p>
+            <p class="chapter-line"><span data-voice="dialogue">„Vlků ne.“ Pak se otočil a odešel, aniž by vysvětlil víc.</span></p>
+            <p class="chapter-line"><span data-voice="narrator">Teď, když jezdec stoupal temným lesem, si na jeho slova vzpomněl.</span></p>
+            <p class="chapter-line"><span data-voice="narrator">Vítr se znovu zvedl.</span></p>
+            <p class="chapter-line"><span data-voice="narrator">Tentokrát nesl s sebou zvláštní zvuk — vzdálené vytí.</span></p>
+            <p class="chapter-line"><span data-voice="narrator">Vlci.</span></p>
+            <p class="chapter-line"><span data-voice="narrator">Ne jeden. Více.</span></p>
+            <p class="chapter-line"><span data-voice="narrator">Zvuk přicházel z různých stran, odrážel se od skal a stromů a měnil se v podivnou ozvěnu, která zaplňovala celé údolí.</span></p>
+            <p class="chapter-line"><span data-voice="narrator">Kůň se neklidně zavrtěl.</span></p>
+            <p class="chapter-line"><span data-voice="narrator">Jezdec ho uklidnil a pokračoval dál.</span></p>
+            <p class="chapter-line"><span data-voice="narrator">Po chvíli se stromy začaly rozestupovat.</span></p>
+            <p class="chapter-line"><span data-voice="narrator">Cesta vystoupila z lesa na úzký skalní hřeben. Vítr zde foukal silněji a mraky se na okamžik roztrhly.</span></p>
+            <p class="chapter-line"><span data-voice="narrator">Měsíc se objevil nad horami.</span></p>
+            <p class="chapter-line"><span data-voice="narrator">A v jeho světle se před jezdcem objevil hrad.</span></p>
+            <p class="chapter-line"><span data-voice="narrator">Stál vysoko na skalnatém vrcholu, téměř jako součást hory samotné. Zdi byly tmavé a vysoké, věže ostré jako hroty kopí. Nebyl to palác, ale pevnost — místo postavené pro válku.</span></p>
+            <p class="chapter-line"><span data-voice="narrator">Několik oken svítilo slabým světlem.</span></p>
+            <p class="chapter-line"><span data-voice="narrator">Všude kolem byly jen lesy.</span></p>
+            <p class="chapter-line"><span data-voice="narrator">A hluboko pod hradem řeka, která se v měsíčním světle leskla jako stříbrná čepel.</span></p>
+            <p class="chapter-line"><span data-voice="narrator">Jezdec zastavil koně.</span></p>
+            <p class="chapter-line"><span data-voice="narrator">Hrad působil zvláštním dojmem. Nebyl opuštěný, a přesto byl tichý — jako by uvnitř někdo čekal.</span></p>
+            <p class="chapter-line"><span data-voice="narrator">V tu chvíli se vítr zvedl znovu.</span></p>
+            <p class="chapter-line"><span data-voice="narrator">Z lesa za jezdcem se ozvalo další vytí vlků, tentokrát bližší.</span></p>
+            <p class="chapter-line"><span data-voice="narrator">Kůň zafrkal a neklidně přešlápl.</span></p>
+            <p class="chapter-line"><span data-voice="narrator">Jezdec se ještě jednou podíval na hrad.</span></p>
+            <p class="chapter-line"><span data-voice="narrator">Pak pomalu pobídl koně vpřed.</span></p>
+            <p class="chapter-line"><span data-voice="narrator">Cesta vedla vzhůru k bráně.</span></p>
+            <p class="chapter-line"><span data-voice="narrator">Nikde nebyla hlídka.</span></p>
+            <p class="chapter-line"><span data-voice="narrator">Nikde žádný hlas.</span></p>
+            <p class="chapter-line"><span data-voice="narrator">Jen vítr, který procházel mezi kameny, a vzdálené vytí vlků v temných lesích Karpat.</span></p>
+            <p class="chapter-line"><span data-voice="narrator">Když jezdec dojel k bráně, těžké dveře se začaly pomalu otevírat.</span></p>
+            <p class="chapter-line"><span data-voice="narrator">Nikdo nebyl vidět.</span></p>
+            <p class="chapter-line"><span data-voice="narrator">Ale někdo je otevřel.</span></p>
+            <p class="chapter-line"><span data-voice="narrator">Nad hradem se znovu zavřely mraky a měsíc zmizel.</span></p>
+            <p class="chapter-line"><span data-voice="narrator">Tma se vrátila.</span></p>
+            <p class="chapter-line"><span data-voice="narrator">A jezdec vstoupil do pevnosti muže, jehož jméno už tehdy začínalo budit strach.</span></p>
+            <p class="chapter-line"><span data-voice="narrator">Drăculea.</span></p>
+            <p class="chapter-line"><span data-voice="narrator">Syn draka.</span></p>
+            <p class="chapter-line"><span data-voice="narrator">Vládce země na hranici světa.</span></p>
+            <p class="chapter-line"><span data-voice="narrator">Tak začíná příběh, který se po staletích promění v legendu.</span></p>
+            <div class="chapter-actions">
+              <button class="btn primary" data-action="play">Přehrát kapitolu (hlasy)</button>
+              <button class="btn ghost" data-action="pause">Pozastavit</button>
+            </div>
+            <div class="soundtrack-pill">Soundtrack: Karpatský dech</div>
+          </div>
+          <div class="chapter-illustration illus-prolog">
+            <div class="illus-caption">Linoryt: Hřeben nad Poenari</div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="chapter" id="kapitola-1" data-soundtrack="zpoved">
+        <div class="chapter-page">
+          <div class="chapter-text">
+            <p class="chapter-tag">Stránka 2 / 4</p>
+            <h3>Kapitola I — Poslední zpověď Rada</h3>
+            <p class="chapter-note">Kompletní text kapitoly:</p>
+            <p class="chapter-line"><span data-voice="radu">Nevím, kdo tyto stránky jednou otevře.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Možná nikdo.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Možná mnich, který bude uklízet pokoj po mé smrti.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Možná učenec, který bude hledat pravdu v zaprášených kronikách.</span></p>
+            <p class="chapter-line"><span data-voice="radu">A možná jen někdo, kdo bude chtít věřit příběhu o monstru.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Ale pokud tyto řádky někdo čte, znamená to, že jsem už mrtvý.</span></p>
+            <p class="chapter-line"><span data-voice="radu">A právě proto mohu konečně psát pravdu.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Mé jméno je Rado Drăculea.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Syn Vlada, kterému říkali Dracul — drak.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Bratr muže, jehož jméno dnes šeptají lidé se strachem.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Můj bratr se jmenoval Vlado.</span></p>
+            <p class="chapter-line"><span data-voice="radu">A svět ho zná jinak.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Jako Draculu.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Lidé si myslí, že znají jeho příběh.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Vyprávějí o krvi, o kůlech a o lesích plných mrtvých těl. Říkají, že byl šílený. Že byl zvíře. Že byl démon v lidské podobě.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Možná mají pravdu.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Ale nikdo z nich neví, kdy se to stalo.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Nikdo neví, kdy se z mého bratra stal stín, který dodnes chodí mezi lidmi.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Já to vím.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Protože jsem tam byl.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Protože jsem ho znal dřív, než ho začal znát svět.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Dřív, než ho začali nazývat monstrem.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Když jsme byli děti, nebyl Vlado nic víc než chlapec z hor.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Běhali jsme po lesích Karpat, kde byly stromy tak staré, že jejich kořeny prorůstaly kameny. Lovili jsme v údolích, kde se ráno držela mlha, a večer jsme seděli u ohně a poslouchali staré příběhy o vlcích a o duších, které se někdy vracejí z mrtvých.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Vlado byl vždy silnější než já.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Já byl jen rychlejší.</span></p>
+            <p class="chapter-line"><span data-voice="radu">A možná chytřejší.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Ale tehdy jsme byli bratři.</span></p>
+            <p class="chapter-line"><span data-voice="radu">A nic na světě nebylo důležitější.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Pak přišla noc, která změnila všechno.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Noc, kdy jsme opustili domov a byli odvedeni daleko od hor.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Do světa, kde se rodí říše.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Do světa, kde se rodí monstra.</span></p>
+            <p class="chapter-line"><span data-voice="radu">O tom však budu psát později.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Nejdřív musíš pochopit jednu věc.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Vlado nebyl monstrum, když se narodil.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Ani když byl mladý.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Ani když jsme byli rukojmí u dvora sultána.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Ne.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Monstrum se nerodí.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Monstrum se vytváří.</span></p>
+            <p class="chapter-line"><span data-voice="radu">A pokud existuje pravda, kterou musí tento deník říct, pak je to tato: Draculu nestvořil Bůh.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Nestvořil ho ani svět.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Stvořil jsem ho já.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Tato zpověď není psána pro lidi.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Je psána pro Boha.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Protože vím, že až se mé srdce zastaví, bude to on, kdo se mě zeptá na jedinou otázku: „Proč?“ A já nevím, jestli na ni dokážu odpovědět.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Ale vím, že musím alespoň vyprávět příběh.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Od začátku.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Od dnů, kdy jsme byli jen dva bratři v lesích Karpat.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Dřív, než svět poznal jméno Dracula.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Dřív, než jsem pochopil, že některé legendy nejsou jen příběhy.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Ale tresty.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Proto začínám psát.</span></p>
+            <p class="chapter-line"><span data-voice="radu">A pokud někdo tyto stránky jednou čte, pak už víš první pravdu.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Ne o mém bratrovi.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Ale o mně.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Já jsem Rado.</span></p>
+            <p class="chapter-line"><span data-voice="radu">A já jsem stvořil Draculu.</span></p>
+            <div class="chapter-actions">
+              <button class="btn primary" data-action="play">Přehrát kapitolu (hlasy)</button>
+              <button class="btn ghost" data-action="pause">Pozastavit</button>
+            </div>
+            <div class="soundtrack-pill">Soundtrack: Zpověď v kameni</div>
+          </div>
+          <div class="chapter-illustration illus-zpoved">
+            <div class="illus-caption">Linoryt: Klášterní chodba</div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="chapter" id="kapitola-2" data-soundtrack="detstvi">
+        <div class="chapter-page">
+          <div class="chapter-text">
+            <p class="chapter-tag">Stránka 3 / 4</p>
+            <h3>Kapitola II — Dětství v horách</h3>
+            <p class="chapter-note">Kompletní text kapitoly:</p>
+            <p class="chapter-line"><span data-voice="radu">Než začneš soudit mého bratra, musíš nejprve poznat zemi, která nás zrodila.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Protože v Karpatech se lidé nerodí stejní jako jinde.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Hory člověka formují jinak než města.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Vítr je zde ostřejší. Zima delší. A noc hlubší.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Lesy jsou staré tak, že některé stromy pamatují více lidských životů, než kolik jich dokáže spočítat kronikář. V těch lesích jsme vyrůstali.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Já a Vlado.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Náš otec byl vládce.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Ale my jsme byli děti hor.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Často jsme utíkali z kamenných zdí dvora, protože Vlado nenáviděl být zavřený.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Říkal, že skutečný muž musí znát les stejně dobře jako meč.</span></p>
+            <p class="chapter-line"><span data-voice="radu">A tak jsme běhali mezi stromy, které rostly tak blízko sebe, že slunce někdy sotva proniklo až k zemi.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Pamatuji si jeden den obzvlášť jasně.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Bylo nám možná deset nebo jedenáct let.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Ráno bylo chladné a mlha ležela v údolí jako bílé moře. Vlado mě vzbudil ještě před svítáním a řekl, že dnes půjdeme lovit vlky.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Smál jsem se.</span></p>
+            <p class="chapter-line"><span data-voice="dialogue">„Vlků se nebojím,“ řekl jsem.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Vlado se na mě podíval tím svým zvláštním pohledem, který měl už jako dítě.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Nebyl to pohled chlapce.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Byl to pohled někoho, kdo už tehdy věděl, že svět je tvrdý.</span></p>
+            <p class="chapter-line"><span data-voice="dialogue">„Neměl bys,“ odpověděl.</span></p>
+            <p class="chapter-line"><span data-voice="dialogue">„Vlk není nejhorší věc, která může v těchto horách žít.“ Tehdy jsem jeho slovům nerozuměl.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Ale Karpaty mají zvláštní vlastnost.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Člověk v nich časem začne chápat věci, které se nedají vysvětlit.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Večer jsme seděli u ohně a poslouchali staré pastýře, kteří vyprávěli příběhy. O duších, které se vracejí. O lidech, kteří zemřeli špatnou smrtí a nedokázali odejít.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Jako děti jsme těm příběhům nevěřili.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Ale Vlado je poslouchal jinak.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Nikdy se nesmál.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Jen seděl a díval se do ohně.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Vlado byl vždy jiný než já.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Byl starší jen o pár let, ale někdy jsem měl pocit, že mezi námi leží celý život.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Když jsme trénovali s meči, bojoval tak, jako by každá rána byla skutečná.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Když jsme jezdili na koních, jel vždy rychleji než ostatní.</span></p>
+            <p class="chapter-line"><span data-voice="radu">A když jsme se hádali, vždy vyhrál.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Ne silou.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Ale vůlí.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Já jsem byl jiný.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Můj otec říkal, že mám dar pro slova.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Dokázal jsem přesvědčit lidi, aby udělali věci, které by jinak neudělali.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Vlado říkal, že je to slabost.</span></p>
+            <p class="chapter-line"><span data-voice="dialogue">„Slova jsou pro ty, kteří neumí držet meč,“ říkal.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Ale přesto mě poslouchal.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Možná proto, že jsem byl jeho bratr.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Jednoho večera jsme seděli na kopci nad naším domovem.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Byla noc a dole v údolí hořely malé ohně vesnic.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Vítr byl studený a z lesa se ozývalo vytí vlků.</span></p>
+            <p class="chapter-line"><span data-voice="dialogue">„Jednou budu vládnout,“ řekl Vlado.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Ne řekl.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Prohlásil.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Tak, jako někdo oznamuje něco, co je už rozhodnuto.</span></p>
+            <p class="chapter-line"><span data-voice="dialogue">„A co budeš dělat ty?“ zeptal se.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Dlouho jsem přemýšlel.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Pak jsem odpověděl: „Já nebudu vládnout.“ Podíval se na mě překvapeně.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Usmál jsem se.</span></p>
+            <p class="chapter-line"><span data-voice="dialogue">„Já budu ten, kdo rozhoduje, kdo vládne.“ Tehdy jsme se oba zasmáli.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Byli jsme jen děti.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Nevěděli jsme, že jednoho dne budou tyto dvě věty stát proti sobě.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Když dnes zavírám oči, často se vracím právě do těchto dní.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Do lesů Karpat.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Do času, kdy jsme byli jen bratři.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Ne nepřátelé.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Ne legendy.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Jen dva chlapci, kteří věřili, že svět je větší než hory kolem nich.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Ale svět byl mnohem větší.</span></p>
+            <p class="chapter-line"><span data-voice="radu">A brzy si pro nás přišel.</span></p>
+            <p class="chapter-line"><span data-voice="radu">V podobě mužů, kteří přijeli z jihu.</span></p>
+            <p class="chapter-line"><span data-voice="radu">V podobě říše, která pohlcovala země stejně snadno jako oheň suché dřevo.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Byla to noc, kdy nás odvedli od domova.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Noc, kdy jsme poprvé opustili Karpaty.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Noc, kdy jsme se stali rukojmími.</span></p>
+            <p class="chapter-line"><span data-voice="radu">A právě tehdy začal příběh, který nakonec stvořil Draculu.</span></p>
+            <div class="chapter-actions">
+              <button class="btn primary" data-action="play">Přehrát kapitolu (hlasy)</button>
+              <button class="btn ghost" data-action="pause">Pozastavit</button>
+            </div>
+            <div class="soundtrack-pill">Soundtrack: Tichý sníh</div>
+          </div>
+          <div class="chapter-illustration illus-detstvi">
+            <div class="illus-caption">Linoryt: Dětský stín v závěji</div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="chapter" id="kapitola-3" data-soundtrack="rukojmi">
+        <div class="chapter-page">
+          <div class="chapter-text">
+            <p class="chapter-tag">Stránka 4 / 4</p>
+            <h3>Kapitola III — Rukojmí</h3>
+            <p class="chapter-note">Kompletní text kapitoly:</p>
+            <p class="chapter-line"><span data-voice="radu">Existují okamžiky, kdy člověk pozná, že dětství skončilo.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Ne pomalu.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Ale náhle.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Jako když se dveře zavřou za zády a ty víš, že už je nikdy neotevřeš.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Pro nás to byla noc, kdy přijeli poslové z jihu.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Pamatuji si jejich koně. Byli velcí a tmaví a jejich sedla byla zdobená způsobem, jaký jsem do té doby neviděl. Muži, kteří na nich seděli, mluvili jazykem, který zněl jako šumění vody mezi kameny.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Otec nás zavolal do své komnaty.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Stál u okna a díval se do tmy nad horami.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Dlouho mlčel.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Pak se otočil.</span></p>
+            <p class="chapter-line"><span data-voice="dialogue">„Pojedete se mnou,“ řekl.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Tehdy jsem ještě nevěděl, co to znamená.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Vlado však věděl.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Viděl jsem to v jeho očích.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Ne strach.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Ale něco jiného.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Hněv.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Cesta trvala mnoho dní.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Opustili jsme Karpaty a s každou mílí se krajina měnila. Lesy řídly, hory se rozestupovaly a vzduch byl teplejší.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Poprvé jsem viděl města větší než naše pevnosti.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Poprvé jsem slyšel jazyky, kterým jsem nerozuměl.</span></p>
+            <p class="chapter-line"><span data-voice="radu">A poprvé jsem pochopil, jak malý je náš svět v horách.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Když jsme dorazili k dvorskému městu sultána, byl večer.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Nikdy nezapomenu na první pohled.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Paláce se zvedaly nad vodou jako město z jiného světa. Všude byly světla, hudba a vůně koření, které jsem nikdy předtím necítil.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Bylo to krásné.</span></p>
+            <p class="chapter-line"><span data-voice="radu">A děsivé.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Tehdy nám otec konečně řekl pravdu.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Nebudeme hosty.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Budeme rukojmími.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Zástavou jeho věrnosti.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Vlado vyskočil na nohy.</span></p>
+            <p class="chapter-line"><span data-voice="dialogue">„Jsme synové vládce,“ řekl. „Ne vězni.“ Otec se na něj dlouho díval.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Pak odpověděl slovy, která jsem nikdy nezapomněl.</span></p>
+            <p class="chapter-line"><span data-voice="dialogue">„Synu… v tomto světě jsou někdy i synové vladařů jen mince.“ Tak jsme zůstali.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Roky.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Pro Vlada to bylo vězení.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Pro mě…</span></p>
+            <p class="chapter-line"><span data-voice="radu">něco jiného.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Dvořané nás učili jazyky, zvyky a způsoby dvora.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Učili nás, jak přemýšlet o říši.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Jak funguje moc.</span></p>
+            <p class="chapter-line"><span data-voice="radu">A já začal chápat něco, co Vlado nikdy nepřijal.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Že svět není jen o síle.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Je o vlivu.</span></p>
+            <p class="chapter-line"><span data-voice="radu">O lidech.</span></p>
+            <p class="chapter-line"><span data-voice="radu">O slovech.</span></p>
+            <p class="chapter-line"><span data-voice="radu">A právě tam jsem poprvé uviděl jeho.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Mehmeda.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Byl ještě mladý, ale jeho přítomnost byla jiná než u ostatních.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Když vstoupil do místnosti, lidé se narovnali.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Ne proto, že by museli.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Ale protože chtěli.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Takovou moc jsem nikdy předtím neviděl.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Jednoho dne nás zavolali do zahrady paláce.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Byl tam on.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Seděl u fontány a poslouchal hudebníky.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Když nás uviděl, pokynul nám.</span></p>
+            <p class="chapter-line"><span data-voice="dialogue">„To jsou synové Draculu,“ řekl.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Jeho hlas byl klidný.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Podíval se na Vlada.</span></p>
+            <p class="chapter-line"><span data-voice="radu">A pak na mě.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Jeho oči se na chvíli zastavily.</span></p>
+            <p class="chapter-line"><span data-voice="dialogue">„A ty,“ řekl.</span></p>
+            <p class="chapter-line"><span data-voice="dialogue">„Jak se jmenuješ?“ „Rado.“ Usmál se.</span></p>
+            <p class="chapter-line"><span data-voice="dialogue">„Rado,“ zopakoval pomalu.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Vlado stál vedle mě a mlčel.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Ale já jsem cítil jeho pohled.</span></p>
+            <p class="chapter-line"><span data-voice="radu">A věděl jsem, že chápe něco, co jsem tehdy ještě nechápal.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Že ten okamžik změní všechno.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Vlado se nikdy nepřizpůsobil.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Nenáviděl každý den, který jsme tam strávili.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Nenáviděl jejich jazyk.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Jejich víru.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Jejich svět.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Já…</span></p>
+            <p class="chapter-line"><span data-voice="radu">já jsem začal vidět věci jinak.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Začal jsem chápat, že moc, kterou drží sultán, je větší než všechna naše horská království dohromady.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Začal jsem si představovat svět, který je větší než Karpaty.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Svět, kde by jeden muž mohl vládnout mnoha zemím.</span></p>
+            <p class="chapter-line"><span data-voice="radu">A někdy v těch letech jsem začal věřit něčemu nebezpečnému.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Že tím mužem bych mohl být já.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Když dnes o tom píšu, chápu, že právě tam se všechno změnilo.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Ne ve chvíli, kdy Vlado poprvé zvedl meč.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Ale ve chvíli, kdy jsem já poprvé zatoužil po moci.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Protože od té chvíle jsme už nebyli jen bratři.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Stali jsme se něčím jiným.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Dvěma cestami.</span></p>
+            <p class="chapter-line"><span data-voice="radu">Které se jednoho dne měly střetnout.</span></p>
+            <p class="chapter-line"><span data-voice="radu">A mezi nimi stál muž jménem Mehmed.</span></p>
+            <p class="chapter-line"><span data-voice="radu">A říše, která pohlcovala svět.</span></p>
+            <div class="chapter-actions">
+              <button class="btn primary" data-action="play">Přehrát kapitolu (hlasy)</button>
+              <button class="btn ghost" data-action="pause">Pozastavit</button>
+            </div>
+            <div class="soundtrack-pill">Soundtrack: Železo a popel</div>
+          </div>
+          <div class="chapter-illustration illus-rukojmi">
+            <div class="illus-caption">Linoryt: Brána bez návratu</div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <footer class="site-footer">
+      <div>
+        <p class="footer-title">Další kroky</p>
+        <p>
+          Přidat kompletní kapitoly, detailní komixové panely, skutečné audio stopy, originální ilustrace a
+          filmové intermezza.
+        </p>
+      </div>
+      <div class="footer-meta">
+        <p>Navrženo jako temný webový náhled (desktop + mobile).</p>
+      </div>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
