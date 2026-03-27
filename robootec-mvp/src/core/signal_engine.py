@@ -131,11 +131,16 @@ class SignalEngine:
         range_low = min(candle.low for candle in opening_range)
         last_candle = candles[-1]
         avg_volume = average_volume(opening_range, len(opening_range)) or 0.0
-        volume_spike = last_candle.volume > avg_volume * 1.5 if avg_volume > 0 else False
+        volume_multiple = float(strategy.entry.get("volume_spike_multiple", 1.5))
+        volume_spike = last_candle.volume > avg_volume * volume_multiple if avg_volume > 0 else False
         range_size = max(range_high - range_low, 1e-6)
+        min_breakout_r = float(strategy.entry.get("min_breakout_r", 0.0))
 
         if last_candle.close > range_high and volume_spike:
-            quality = min((last_candle.close - range_high) / range_size, 1.0)
+            breakout_r = (last_candle.close - range_high) / range_size
+            if breakout_r < min_breakout_r:
+                return None
+            quality = min(breakout_r, 1.0)
             return self._candidate(
                 SignalDirection.LONG,
                 "orb_breakout_long",
@@ -146,7 +151,10 @@ class SignalEngine:
                 candles=candles,
             )
         if last_candle.close < range_low and volume_spike:
-            quality = min((range_low - last_candle.close) / range_size, 1.0)
+            breakout_r = (range_low - last_candle.close) / range_size
+            if breakout_r < min_breakout_r:
+                return None
+            quality = min(breakout_r, 1.0)
             return self._candidate(
                 SignalDirection.SHORT,
                 "orb_breakout_short",
@@ -168,14 +176,17 @@ class SignalEngine:
         if vwap_value is None:
             return None
         closes = [candle.close for candle in candles]
-        fast = sma(closes, 20)
-        slow = sma(closes, 50) or sma(closes, 30)
+        fast_period = int(strategy.entry.get("fast_ma", 20))
+        slow_period = int(strategy.entry.get("slow_ma", 50))
+        fast = sma(closes, fast_period)
+        slow = sma(closes, slow_period) or sma(closes, max(fast_period + 10, 30))
         if fast is None or slow is None:
             return None
         trend = 1 if fast > slow else -1
         last_candle = candles[-1]
+        max_distance_pct = float(strategy.entry.get("max_distance_pct", 0.3)) / 100.0
         distance = abs(last_candle.close - vwap_value) / vwap_value
-        if distance > 0.003:
+        if distance > max_distance_pct:
             return None
         if trend > 0 and last_candle.close >= vwap_value:
             quality = max(0.0, 1.0 - distance * 200)
@@ -208,15 +219,21 @@ class SignalEngine:
         if len(candles) < 55:
             return None
         closes = [candle.close for candle in candles]
-        fast = sma(closes, 20)
-        slow = sma(closes, 50)
+        fast_period = int(strategy.entry.get("fast_ma", 20))
+        slow_period = int(strategy.entry.get("slow_ma", 50))
+        fast = sma(closes, fast_period)
+        slow = sma(closes, slow_period)
         if fast is None or slow is None:
             return None
         last_candle = candles[-1]
+        max_pullback_pct = float(strategy.entry.get("max_pullback_pct", 0.5)) / 100.0
         distance = abs(last_candle.close - fast) / fast if fast else 0.0
-        if distance > 0.005:
+        if distance > max_pullback_pct:
             return None
-        if fast > slow and last_candle.close > last_candle.open:
+        confirm_candle = str(strategy.entry.get("confirm_candle", "directional")).lower()
+        long_confirm = last_candle.close > last_candle.open if confirm_candle == "directional" else True
+        short_confirm = last_candle.close < last_candle.open if confirm_candle == "directional" else True
+        if fast > slow and long_confirm:
             quality = max(0.0, 1.0 - distance * 200)
             return self._candidate(
                 SignalDirection.LONG,
@@ -227,7 +244,7 @@ class SignalEngine:
                 instrument=strategy.instrument,
                 candles=candles,
             )
-        if fast < slow and last_candle.close < last_candle.open:
+        if fast < slow and short_confirm:
             quality = max(0.0, 1.0 - distance * 200)
             return self._candidate(
                 SignalDirection.SHORT,
@@ -246,14 +263,15 @@ class SignalEngine:
         candles = self._get_candles(market_state, strategy)
         if len(candles) < 22:
             return None
-        lookback = candles[-22:-2]
+        lookback_bars = int(strategy.entry.get("lookback_bars", 20))
+        lookback = candles[-(lookback_bars + 2) : -2]
         breakout_high = highest_high(lookback, len(lookback))
         breakout_low = lowest_low(lookback, len(lookback))
         if breakout_high is None or breakout_low is None:
             return None
         prev_candle = candles[-2]
         last_candle = candles[-1]
-        tolerance = 0.003
+        tolerance = float(strategy.entry.get("retest_tolerance_pct", 0.3)) / 100.0
 
         if prev_candle.close > breakout_high:
             if last_candle.low <= breakout_high * (1 + tolerance) and last_candle.close > breakout_high:
@@ -289,8 +307,8 @@ class SignalEngine:
             return None
 
         tz = ZoneInfo("Europe/London")
-        asian_start = time(0, 0)
-        asian_end = time(7, 0)
+        asian_session = str(strategy.entry.get("asian_session", "00:00-07:00"))
+        asian_start, asian_end = _parse_hours(asian_session)
         asian_range = [
             candle
             for candle in candles
@@ -303,9 +321,12 @@ class SignalEngine:
         range_low = min(candle.low for candle in asian_range)
         last_candle = candles[-1]
 
-        atr_fast = atr(candles, 4) or 0.0
-        atr_slow = atr(candles, 16) or 0.0
-        range_contraction = atr_slow > 0 and atr_fast < atr_slow * 0.8
+        atr_fast_period = int(strategy.entry.get("atr_fast", 4))
+        atr_slow_period = int(strategy.entry.get("atr_slow", 16))
+        contraction_ratio = float(strategy.entry.get("contraction_ratio", 0.8))
+        atr_fast_value = atr(candles, atr_fast_period) or 0.0
+        atr_slow_value = atr(candles, atr_slow_period) or 0.0
+        range_contraction = atr_slow_value > 0 and atr_fast_value < atr_slow_value * contraction_ratio
 
         if last_candle.close > range_high and range_contraction:
             quality = min((last_candle.close - range_high) / max(range_high - range_low, 1e-6), 1.0)

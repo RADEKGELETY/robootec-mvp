@@ -42,6 +42,14 @@ class TradeManagementConfig:
     partial_exit_at_r: float
     partial_exit_close_pct: float
     trailing_stop_enabled_for_types: List[str]
+    trailing_stop_atr_period: int
+    trailing_stop_atr_multiple: float
+
+
+@dataclass(frozen=True)
+class ExecutionConfig:
+    slippage_bps: float
+    fee_bps: float
 
 
 @dataclass(frozen=True)
@@ -80,6 +88,7 @@ class TradingConfig:
     portfolio: PortfolioConfig
     global_risk: GlobalRiskConfig
     trade_management: TradeManagementConfig
+    execution: ExecutionConfig
     confidence_model: ConfidenceModelConfig
     decision_rules: List[DecisionRule]
     strategies: List[StrategyConfig]
@@ -139,6 +148,14 @@ def load_trading_config(path: str | Path) -> TradingConfig:
         partial_exit_at_r=float(trade_mgmt_data["partial_exit"]["at_r"]),
         partial_exit_close_pct=float(trade_mgmt_data["partial_exit"]["close_pct"]),
         trailing_stop_enabled_for_types=list(trade_mgmt_data["trailing_stop"]["enabled_for_strategy_types"]),
+        trailing_stop_atr_period=int(trade_mgmt_data["trailing_stop"].get("atr_period", 14)),
+        trailing_stop_atr_multiple=float(trade_mgmt_data["trailing_stop"].get("atr_multiple", 2.0)),
+    )
+
+    execution_data = data.get("execution", {})
+    execution = ExecutionConfig(
+        slippage_bps=float(execution_data.get("slippage_bps", 0.0)),
+        fee_bps=float(execution_data.get("fee_bps", 0.0)),
     )
 
     confidence_data = _get_required(data, "confidence_model")
@@ -184,6 +201,7 @@ def load_trading_config(path: str | Path) -> TradingConfig:
         portfolio=portfolio,
         global_risk=global_risk,
         trade_management=trade_management,
+        execution=execution,
         confidence_model=confidence_model,
         decision_rules=decision_rules,
         strategies=strategies,

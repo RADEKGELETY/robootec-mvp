@@ -40,11 +40,18 @@ class Trade:
     entry_price: float
     stop_price: float
     target_price: float
+    initial_risk_per_unit: float
     reason: str
     exit_time: Optional[datetime] = None
     exit_price: Optional[float] = None
     pnl_r: Optional[float] = None
     pnl_pct: Optional[float] = None
+    realized_pnl_r: float = 0.0
+    realized_pnl_pct: float = 0.0
+    remaining_pct: float = 1.0
+    partial_exit_done: bool = False
+    break_even_armed: bool = False
+    trailing_stop_enabled: bool = False
     bars_held: int = 0
 
 
@@ -122,7 +129,12 @@ class BacktestRunner:
                 features=features,
             )
 
-            self._update_open_trades(event, open_trades, closed_trades)
+            self._update_open_trades(
+                event,
+                open_trades,
+                closed_trades,
+                candles_by_key,
+            )
 
             strategies_for_event = strategy_by_key.get((event.instrument, event.timeframe), [])
             if not strategies_for_event:
@@ -185,7 +197,9 @@ class BacktestRunner:
         for trade in list(open_trades.values()):
             if trade.exit_time is None:
                 trade.exit_time = last_event.timestamp
-                trade.exit_price = last_event.candle.close
+                trade.exit_price = self._apply_slippage(
+                    last_event.candle.close, trade.direction, side="exit"
+                )
                 self._finalize_trade(trade)
                 closed_trades.append(trade)
 
@@ -268,11 +282,13 @@ class BacktestRunner:
         if avg_atr is None or avg_atr <= 0:
             return None
 
-        entry_price = candles[-1].close
         direction = signal.direction
+        entry_price = candles[-1].close
+        entry_price = self._apply_slippage(entry_price, direction, side="entry")
         stop_price, target_price = self._build_levels(strategy, direction, entry_price, avg_atr)
         if stop_price == entry_price:
             return None
+        initial_risk_per_unit = abs(entry_price - stop_price)
 
         risk_state = self._risk_engine.get_strategy_state(strategy.id)
         position = self._position_sizer.size_position(
@@ -292,7 +308,9 @@ class BacktestRunner:
             entry_price=entry_price,
             stop_price=stop_price,
             target_price=target_price,
+            initial_risk_per_unit=initial_risk_per_unit,
             reason=signal.reason,
+            trailing_stop_enabled=self._is_trailing_enabled(strategy),
         )
 
     @staticmethod
@@ -316,6 +334,7 @@ class BacktestRunner:
         event: CandleEvent,
         open_trades: Dict[str, Trade],
         closed_trades: List[Trade],
+        candles_by_key: Dict[str, Dict[str, List[Candle]]],
     ) -> None:
         to_close: List[str] = []
         for trade_id, trade in open_trades.items():
@@ -325,11 +344,17 @@ class BacktestRunner:
             trade.bars_held += 1
             exit_price = self._check_exit(trade, event.candle)
             if exit_price is None:
+                exit_price = self._maybe_partial_exit(trade, event.candle)
+            if exit_price is None:
+                exit_price = self._check_target(trade, event.candle)
+            if exit_price is None:
+                self._maybe_break_even(trade, event.candle)
+                self._update_trailing_stop(trade, candles_by_key)
                 if trade.bars_held >= self._config.max_holding_bars:
                     exit_price = event.candle.close
             if exit_price is not None:
                 trade.exit_time = event.timestamp
-                trade.exit_price = exit_price
+                trade.exit_price = self._apply_slippage(exit_price, trade.direction, side="exit")
                 self._finalize_trade(trade)
                 closed_trades.append(trade)
                 to_close.append(trade_id)
@@ -353,11 +378,17 @@ class BacktestRunner:
         if trade.direction == SignalDirection.LONG:
             if candle.low <= trade.stop_price:
                 return trade.stop_price
-            if candle.high >= trade.target_price:
-                return trade.target_price
         else:
             if candle.high >= trade.stop_price:
                 return trade.stop_price
+        return None
+
+    @staticmethod
+    def _check_target(trade: Trade, candle: Candle) -> Optional[float]:
+        if trade.direction == SignalDirection.LONG:
+            if candle.high >= trade.target_price:
+                return trade.target_price
+        else:
             if candle.low <= trade.target_price:
                 return trade.target_price
         return None
@@ -365,23 +396,122 @@ class BacktestRunner:
     def _finalize_trade(self, trade: Trade) -> None:
         if trade.exit_price is None:
             return
-        risk_per_unit = abs(trade.entry_price - trade.stop_price)
-        if risk_per_unit == 0:
-            trade.pnl_r = 0.0
-        else:
-            direction_sign = 1 if trade.direction == SignalDirection.LONG else -1
-            trade.pnl_r = (trade.exit_price - trade.entry_price) * direction_sign / risk_per_unit
-        trade.pnl_pct = (
-            (trade.exit_price - trade.entry_price)
-            / trade.entry_price
-            * (1 if trade.direction == SignalDirection.LONG else -1)
-            * 100.0
-        )
+        remaining_move = self._pnl_from_exit(trade, trade.exit_price, trade.remaining_pct)
+        total_pnl_r = trade.realized_pnl_r + remaining_move[0]
+        total_pnl_pct = trade.realized_pnl_pct + remaining_move[1]
+        trade.pnl_r = total_pnl_r
+        trade.pnl_pct = total_pnl_pct - self._fee_pct_total()
         self._risk_engine.record_trade_result(
             trade.strategy_id, trade.pnl_pct, trade.exit_time or trade.entry_time
         )
         if trade.pnl_pct < 0:
             self._risk_engine.record_portfolio_day_loss(trade.pnl_pct)
+
+    def _maybe_break_even(self, trade: Trade, candle: Candle) -> None:
+        if trade.break_even_armed:
+            return
+        break_even_r = self._trading_config.trade_management.break_even_at_r
+        level = trade.entry_price + trade.initial_risk_per_unit * break_even_r * (
+            1 if trade.direction == SignalDirection.LONG else -1
+        )
+        if trade.direction == SignalDirection.LONG and candle.high >= level:
+            trade.stop_price = trade.entry_price
+            trade.break_even_armed = True
+        if trade.direction == SignalDirection.SHORT and candle.low <= level:
+            trade.stop_price = trade.entry_price
+            trade.break_even_armed = True
+
+    def _maybe_partial_exit(self, trade: Trade, candle: Candle) -> Optional[float]:
+        if trade.partial_exit_done or trade.remaining_pct <= 0:
+            return None
+        partial_r = self._trading_config.trade_management.partial_exit_at_r
+        partial_pct = self._trading_config.trade_management.partial_exit_close_pct / 100.0
+        if partial_pct <= 0:
+            return None
+        level = trade.entry_price + trade.initial_risk_per_unit * partial_r * (
+            1 if trade.direction == SignalDirection.LONG else -1
+        )
+        triggered = False
+        if trade.direction == SignalDirection.LONG and candle.high >= level:
+            triggered = True
+        if trade.direction == SignalDirection.SHORT and candle.low <= level:
+            triggered = True
+        if not triggered:
+            return None
+        exit_price = self._apply_slippage(level, trade.direction, side="exit")
+        pnl_r, pnl_pct = self._pnl_from_exit(trade, exit_price, partial_pct)
+        trade.realized_pnl_r += pnl_r
+        trade.realized_pnl_pct += pnl_pct
+        trade.remaining_pct = max(0.0, trade.remaining_pct - partial_pct)
+        trade.partial_exit_done = True
+        trade.break_even_armed = True
+        trade.stop_price = trade.entry_price
+        self._audit_logger.log(
+            "trade_partial_exit",
+            {
+                "strategy_id": trade.strategy_id,
+                "instrument": trade.instrument,
+                "exit_price": exit_price,
+                "partial_pct": partial_pct,
+                "pnl_r": pnl_r,
+                "pnl_pct": pnl_pct,
+            },
+        )
+        return None
+
+    def _update_trailing_stop(
+        self, trade: Trade, candles_by_key: Dict[str, Dict[str, List[Candle]]]
+    ) -> None:
+        if not trade.trailing_stop_enabled:
+            return
+        candles = candles_by_key.get(trade.instrument, {}).get(trade.timeframe, [])
+        period = self._trading_config.trade_management.trailing_stop_atr_period
+        atr_value = atr(candles, period)
+        if atr_value is None or atr_value <= 0:
+            return
+        multiple = self._trading_config.trade_management.trailing_stop_atr_multiple
+        if trade.direction == SignalDirection.LONG:
+            new_stop = candles[-1].close - atr_value * multiple
+            trade.stop_price = max(trade.stop_price, new_stop)
+        else:
+            new_stop = candles[-1].close + atr_value * multiple
+            trade.stop_price = min(trade.stop_price, new_stop)
+
+    def _pnl_from_exit(self, trade: Trade, exit_price: float, portion: float) -> Tuple[float, float]:
+        if trade.initial_risk_per_unit == 0:
+            return 0.0, 0.0
+        direction_sign = 1 if trade.direction == SignalDirection.LONG else -1
+        pnl_r = (
+            (exit_price - trade.entry_price)
+            * direction_sign
+            / trade.initial_risk_per_unit
+            * portion
+        )
+        pnl_pct = (
+            (exit_price - trade.entry_price)
+            / trade.entry_price
+            * direction_sign
+            * 100.0
+            * portion
+        )
+        return pnl_r, pnl_pct
+
+    def _apply_slippage(self, price: float, direction: SignalDirection, side: str) -> float:
+        bps = self._trading_config.execution.slippage_bps / 10000.0
+        if bps <= 0:
+            return price
+        if side == "entry":
+            return price * (1 + bps) if direction == SignalDirection.LONG else price * (1 - bps)
+        return price * (1 - bps) if direction == SignalDirection.LONG else price * (1 + bps)
+
+    def _fee_pct_total(self) -> float:
+        fee_bps = self._trading_config.execution.fee_bps
+        if fee_bps <= 0:
+            return 0.0
+        return (fee_bps / 100.0) * 2
+
+    def _is_trailing_enabled(self, strategy: StrategyConfig) -> bool:
+        return strategy.type in self._trading_config.trade_management.trailing_stop_enabled_for_types
 
     def _write_trade_log(self, trades: List[Trade]) -> None:
         with self._trade_log_path.open("w", encoding="utf-8", newline="") as handle:
@@ -401,6 +531,12 @@ class BacktestRunner:
                     "exit_price",
                     "pnl_r",
                     "pnl_pct",
+                    "realized_pnl_r",
+                    "realized_pnl_pct",
+                    "remaining_pct",
+                    "partial_exit_done",
+                    "break_even_armed",
+                    "trailing_stop_enabled",
                     "bars_held",
                     "reason",
                 ]
@@ -421,6 +557,12 @@ class BacktestRunner:
                         trade.exit_price if trade.exit_price is not None else "",
                         trade.pnl_r if trade.pnl_r is not None else "",
                         trade.pnl_pct if trade.pnl_pct is not None else "",
+                        trade.realized_pnl_r,
+                        trade.realized_pnl_pct,
+                        trade.remaining_pct,
+                        trade.partial_exit_done,
+                        trade.break_even_armed,
+                        trade.trailing_stop_enabled,
                         trade.bars_held,
                         trade.reason,
                     ]

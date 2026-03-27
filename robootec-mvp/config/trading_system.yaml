@@ -32,6 +32,12 @@ trade_management:
   trailing_stop:
     enabled_for_strategy_types:
       - trend
+    atr_period: 14
+    atr_multiple: 2.0
+
+execution:
+  slippage_bps: 1.0
+  fee_bps: 0.8
 
 confidence_model:
   name: RobootecConfidenceV1
@@ -103,7 +109,8 @@ strategies:
     entry:
       model: opening_range_breakout
       range_minutes: 15
-      confirmation: volume_spike
+      volume_spike_multiple: 1.5
+      min_breakout_r: 0.1
     exit:
       model: r_multiple
       target_r: 2.0
@@ -119,7 +126,9 @@ strategies:
       hours: "09:30-16:00"
     entry:
       model: vwap_pullback
-      confirmation: trend_filter
+      fast_ma: 20
+      slow_ma: 50
+      max_distance_pct: 0.3
     exit:
       model: r_multiple
       target_r: 1.8
@@ -135,7 +144,10 @@ strategies:
       hours: "00:00-23:59"
     entry:
       model: macro_trend_pullback
-      confirmation: higher_timeframe_alignment
+      fast_ma: 20
+      slow_ma: 50
+      max_pullback_pct: 0.5
+      confirm_candle: directional
     exit:
       model: r_multiple
       target_r: 3.0
@@ -151,7 +163,8 @@ strategies:
       hours: "00:00-23:59"
     entry:
       model: breakout_retest
-      confirmation: volatility_expansion
+      lookback_bars: 20
+      retest_tolerance_pct: 0.3
     exit:
       model: r_multiple
       target_r: 3.5
@@ -167,7 +180,10 @@ strategies:
       hours: "07:00-11:00"
     entry:
       model: london_breakout
-      confirmation: range_contraction
+      asian_session: "00:00-07:00"
+      atr_fast: 4
+      atr_slow: 16
+      contraction_ratio: 0.8
     exit:
       model: r_multiple
       target_r: 2.0
