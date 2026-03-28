@@ -25,11 +25,13 @@ jobs:
           python-version: "3.11"
 
       - name: Install dependencies
+        working-directory: robootec-mvp
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
       - name: Run backtest
+        working-directory: robootec-mvp
         run: |
           python src/backtest.py --data-dir data --output-dir output/backtest
 
@@ -37,5 +39,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: backtest-results
-          path: output/backtest
+          path: robootec-mvp/output/backtest
           if-no-files-found: error
