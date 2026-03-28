@@ -1,0 +1,6 @@
+[submodule "robootec-trading strategy-mvp"]
+	path = robootec-trading strategy-mvp
+	url = https://github.com/RADEKGELETY/robootec-trading-strategy-mvp.git
+[submodule "victorie-cleaning"]
+	path = victorie-cleaning
+	url = https://github.com/RADEKGELETY/victorie-cleaning.git

@@ -25,13 +25,11 @@ jobs:
           python-version: "3.11"
 
       - name: Install dependencies
-        working-directory: robootec-mvp
         run: |
           python -m pip install --upgrade pip
           pip install -r robootec-mvp/requirements.txt
 
       - name: Run backtest
-        working-directory: robootec-mvp
         run: |
           python robootec-mvp/src/backtest.py --data-dir robootec-mvp/data --output-dir robootec-mvp/output/backtest
 
