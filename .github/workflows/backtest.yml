@@ -2,6 +2,27 @@ name: ROBOOTEC Backtest
 
 on:
   workflow_dispatch:
+    inputs:
+      symbol:
+        description: "Ticker symbol (e.g., QQQ)"
+        required: true
+        default: "QQQ"
+      instrument:
+        description: "Instrument name for filename (e.g., NASDAQ)"
+        required: true
+        default: "NASDAQ"
+      interval:
+        description: "Intraday interval"
+        required: true
+        default: "5min"
+        type: choice
+        options:
+          - 5min
+          - 15min
+      months:
+        description: "How many months of data to download"
+        required: true
+        default: "6"
 
 permissions:
   contents: read
@@ -29,11 +50,28 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r robootec-mvp/requirements.txt
 
+      - name: Download historical data
+        env:
+          ALPHAVANTAGE_API_KEY: ${{ secrets.ALPHAVANTAGE_API_KEY }}
+        run: |
+          python robootec-mvp/src/download_data.py \
+            --symbol "${{ inputs.symbol }}" \
+            --instrument "${{ inputs.instrument }}" \
+            --interval "${{ inputs.interval }}" \
+            --months "${{ inputs.months }}"
+
       - name: Run backtest
         run: |
           python robootec-mvp/src/backtest.py --data-dir robootec-mvp/data --output-dir robootec-mvp/output/backtest
 
-      - name: Upload artifacts
+      - name: Upload data artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: backtest-data
+          path: robootec-mvp/data
+          if-no-files-found: error
+
+      - name: Upload results artifact
         uses: actions/upload-artifact@v4
         with:
           name: backtest-results
