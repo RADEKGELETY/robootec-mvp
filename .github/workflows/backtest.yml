@@ -40,12 +40,6 @@ jobs:
           fetch-depth: 1
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Debug ls
-        run: |
-          pwd
-          ls -la
-          ls -la src
-
       - name: Set up Python
         uses: actions/setup-python@v6
         with:
